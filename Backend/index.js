@@ -1,10 +1,16 @@
+/* eslint-disable no-undef */
+
  const express = require("express");
  const app = express(); // application create keli 
+ require("dotenv").config(); // dotenv file la acces karnyasathi
+
+ const http = require("http");  // Import HTTP module (needed for Socket.IO)
+ const { initializeSocket } = require("./config/Socket");  // Import Socket.IO setup
+ 
+ const server = http.createServer(app);  // Create HTTP server for Express
 
  app.use(express.json()); // middleware cha instance ghetla 
 
- require("dotenv").config();
- // dotenv file la acces karnyasathi
 
  // database conncetion la call karayche 
  require("./config/Database").connect(); // databse madhun connect method la call kel 
@@ -16,6 +22,9 @@
    app.use("/api/v1",route);
 
  const PORT = process.env.PORT;
+
+  // Initialize Socket.IO
+  initializeSocket(server);
 
  app.get("/", (req,res)=>{
    //res.send(`<h1> This is Home Page sir </h1>`)

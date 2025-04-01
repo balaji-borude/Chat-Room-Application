@@ -1,7 +1,8 @@
+/* eslint-disable no-undef */
 // import room modal;
-const Room = require("../model/Rooms");
+const Room = require("../model/Rooms").default;
 
-const Message = require("../model/Message"); 
+const Message = require("../model/Message").default; 
 
 
 //Fetch available chatrooms.

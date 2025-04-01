@@ -1,18 +1,18 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const roomSchema = new mongoose.Schema({
+const roomSchema = new Schema({
     name:{
         type:String,
         required:true
     },
     createdBy:{
-        type:mongoose.Schema.Types.ObjectId, // which stores the Object id of User , who created this room
+        type:Schema.Types.ObjectId, // which stores the Object id of User , who created this room
         ref:"User",
         required:true
     },
     // This is an Array of those User who were Present in Room 
     participants:[{
-        type:mongoose.Schema.Types.ObjectId, // which store object id of all user present in room
+        type:Schema.Types.ObjectId, // which store object id of all user present in room
         ref:"User"
     }],
     createdAt:{
@@ -21,4 +21,4 @@ const roomSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("Rooms",roomSchema)
+export default model("Rooms",roomSchema)
