@@ -1,0 +1,29 @@
+
+------------------- >  to join the  room 
+{
+  "event": "joinRoom",
+  "data": {
+    "roomId": "67ec2a7b20089d74e69566b1",
+    "user": "67ea3613fa4065aa3e094438"
+  }
+}
+
+---------------------------Send messsage --------------------------->
+
+{
+  "event": "sendMessage",
+  "data": {
+    "roomId": "67ec2a7b20089d74e69566b1",
+    "userId": "67ea3613fa4065aa3e094438",
+    "message": "Hello from Balaji"
+  }
+}
+
+{
+  "event": "sendMessage",
+  "data": {
+    "roomId": "67ec2a7b20089d74e69566b1",
+    "userId": "67ea3613fa4065aa3e094438",
+    "message": "Hello from Balaji"
+  }
+}

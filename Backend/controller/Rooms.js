@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 // import room modal;
-const Room = require("../model/Rooms").default;
+const Room = require("../model/Rooms");
 
-const Message = require("../model/Message").default; 
+const Message = require("../model/Message"); 
 
 
 //Fetch available chatrooms.
@@ -10,12 +10,13 @@ exports.allChatRoom = async(req,res)=>{
     try {
         // fetch all room present in DB 
         const response = await Room.find().populate("createdAt", "createdBy");
+        
         console.log("Getting all available Chatroom ",response);
 
         // success res
         res.status(200).json({
             success:true,
-            message:"All Rooms are Fetched Succesfully",
+            message:"All Chat Rooms are Fetched Succesfully",
             response
         });
 
@@ -77,8 +78,8 @@ exports.createChatroom=async(req,res)=>{
 
 //Add a user to a chatroom
 exports.joinChatRoom = async(req,res)=>{
+
     try{
-        
         //POST /api/rooms/:roomId/join: Add a user to a chatroom.
         //The :roomId part is a route parameter. It allows the client to pass a specific roomId in the URL when calling the API.
         const {roomId} = req.params; //
@@ -86,8 +87,9 @@ exports.joinChatRoom = async(req,res)=>{
         const userId = req.user.id;
 
         // validation 
-             //1. Find the room 
+        //1. Find the room 
         const room = await Room.findById(roomId);
+
         if(!room){
             res.status(404).json({
                 success:false,
@@ -124,32 +126,3 @@ exports.joinChatRoom = async(req,res)=>{
     }
 };
 
-//Fetch messages for a specific chatroom.
-exports.getMessageForRoom= async(req,res)=>{
-    try {
-        //room id lagel 
-        const {roomId} = req.params;
-
-        if(!roomId){
-            res.status(403).json({
-                success:false,
-                message:"Room Id is not present is Required "
-            })
-        };
-
-        // fetche message for given room 
-        const messages = await Message.find({roomId}).sort({timeStamp:1});
-        // succes resp
-        res.status(200).json({
-            success:true,
-            message:`all Messages of${roomId} is succesfully Fetched`,
-            messages
-        })
-    } catch (error) {
-        res.status(500).json({
-            success:false,
-            message:`Error occured while Fetching all messages from given roomId `,
-            error:error
-        })
-    }
-}

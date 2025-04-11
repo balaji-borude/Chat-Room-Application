@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
 
-const Message = require("../models/Message");
-const Room = require("../models/Room");
+const Message = require("../model/Message"); // Message model is in Used 
+
+const Room = require("../model/Rooms");
 
 exports.sendMessage = async (req, res) => {
     try {
@@ -35,10 +36,20 @@ exports.sendMessage = async (req, res) => {
             userID: userId,
             roomId,
             content,
-            timeStamp: new Date()
-        });
+            timeStamp:new Date()
+        }); 
 
         await newMessage.save();
+
+                // OR else -->  i can do Create Method -->  like below 
+            // const newMessage = await Message.create({
+            //     userID: userId,
+            //     roomId,
+            //     content,
+            //     timeStamp: new Date()
+            // });
+                      
+      
 
         return res.status(201).json({
             success: true,
@@ -55,3 +66,34 @@ exports.sendMessage = async (req, res) => {
         });
     }
 };
+
+//Fetch messages for a specific chatroom.
+exports.getMessageFormRoom= async(req,res)=>{
+    try {
+        //room id lagel 
+        const {roomId} = req.params;
+
+        if(!roomId){
+            return res.status(403).json({
+                success:false,
+                message:"Room Id is not present is Required "
+            })
+        };
+
+        // fetche message for given room 
+        const messages = await Message.find({roomId}).sort({timeStamp:1});
+        // succes resp
+        res.status(200).json({
+            success:true,
+            message:`all Messages of${roomId} is succesfully Fetched`,
+            messages
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:`Error occured while Fetching all messages from given roomId `,
+            error:error
+        })
+    }
+}

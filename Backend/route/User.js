@@ -4,7 +4,8 @@ const express = require("express");
 
 const router = express.Router();
 
-console.log("entering in Route ")
+// /console.log("entering in Route ")
+
 // import the controller
 const {signUp,login} = require("../controller/Auth");
 

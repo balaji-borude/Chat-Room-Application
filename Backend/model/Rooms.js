@@ -1,24 +1,29 @@
-import { Schema, model } from "mongoose";
+/* eslint-disable no-undef */
+const mongoose = require("mongoose");
 
-const roomSchema = new Schema({
+const roomSchema = new mongoose.Schema({
+
     name:{
         type:String,
         required:true
     },
     createdBy:{
-        type:Schema.Types.ObjectId, // which stores the Object id of User , who created this room
+        type:mongoose.Schema.Types.ObjectId, // which stores the Object id of User , who created this room
         ref:"User",
         required:true
     },
+
     // This is an Array of those User who were Present in Room 
     participants:[{
-        type:Schema.Types.ObjectId, // which store object id of all user present in room
+        type:mongoose.Schema.Types.ObjectId, // which store object id of all user present in room
         ref:"User"
     }],
+
     createdAt:{
-        type:Date(),
+        type:Date,
         default:Date.now() // on which time and which date this rooom is created 
-    }
+    },
+    
 });
 
-export default model("Rooms",roomSchema)
+module.exports = mongoose.model("Rooms",roomSchema)

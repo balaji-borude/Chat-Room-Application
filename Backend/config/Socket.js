@@ -1,57 +1,70 @@
 /* eslint-disable no-undef */
 const { Server } = require("socket.io");
-//This imports the Server class from socket.io.
-//We use it to create a WebSocket server that listens for real-time connections.
 
-let io; //This variable will store our Socket.IO server instance so that we can use it later
+let io; // Global Socket.IO instance
 
 const initializeSocket = (server) => {
     io = new Server(server, {
         cors: {
-            origin: "*", // Allow all origins (or specify your frontend URL)
+            origin: "*",
             methods: ["GET", "POST"]
         }
     });
 
-    console.log("Socket.io initialized");
-    //Whenever a new user connects to the WebSocket, this function runs.
-    //socket.id is a unique ID assigned to every connected client.
+    console.log("✅ Socket.io initialized");
+
     io.on("connection", (socket) => {
-        console.log("A user connected:", socket.id);
+        console.log(`🔗 New user connected: ${socket.id}`);
 
-        // Listen for "joinRoom" event
-        socket.on("joinRoom", (roomId) => {
+        // Handle user joining a room
+        console.log("Before joinng the Room");
+
+        socket.on("joinRoom", (data) => {
+            console.log("📥 Received joinRoom event:", data);
+            
+            const { roomId, userId } = data;
+        
+            if (!roomId || !userId) {
+                console.log("⚠️ joinRoom Error: Missing roomId or userId");
+                return; // Stop execution if data is missing
+            }
+        
+            console.log("after joining the room");
+        
             socket.join(roomId);
-            console.log(`User ${socket.id} joined room ${roomId}`);
+            console.log(`👤 User ${userId} joined room ${roomId}`);
+        
+            // Notify other users in the room
+            socket.to(roomId).emit("userJoined", { userId, message: `User ${userId} joined the room.` });
         });
+        
 
-        // Listen for new messages
-        socket.on("sendMessage", (data) => {
-            // this will extract roomId,message,and UserId from receiving Data / message
-            const { roomId, message, userId } = data;
+        // Handle sending messages
+        socket.on("sendMessage", ({ roomId, message, userId }) => {
+            if (!roomId || !message || !userId) {
+                console.log("⚠️ sendMessage Error: Missing data");
+                return;
+            }
 
-            console.log(`New message in room ${roomId}:, message`);
+            console.log(`💬 Message from ${userId} in room ${roomId}: ${message}`);
 
-            // Broadcast message to other users in the room
-            io.to(roomId).emit("receiveMessage", { message, userId });
+            // Broadcast message to all users in the room **except sender**
+            socket.to(roomId).emit("receiveMessage", { message, userId });
         });
 
         // Handle user disconnect
         socket.on("disconnect", () => {
-            console.log("A user disconnected:", socket.id);
+            console.log(`❌ User disconnected: ${socket.id}`);
         });
     });
 
     return io;
 };
 
-//Sometimes, we need to access io in other files (e.g., controllers).
-
-//This function ensures that Socket.IO is initialized before using it.
-
+// Function to access the Socket.IO instance anywhere in the project
 const getIo = () => {
     if (!io) {
-        throw new Error("Socket.io has not been initialized!");
+        throw new Error("❌ Socket.io is not initialized!");
     }
     return io;
 };
