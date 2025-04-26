@@ -58,7 +58,7 @@ exports.signUp= async(req,res)=>{
         res.status(500).json({
             success:false,
             message:"Issue in Creating New user ",
-            error:error // yethe jo error ala to pass kela 
+            error:error 
         })
     }
 }
