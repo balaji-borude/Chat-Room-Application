@@ -10,19 +10,19 @@ require('dotenv').config();
 exports.signUp= async(req,res)=>{
     try {
         // get data from req.body 
-        const{firstName, lastname,email,password,confirmPassword} = req.body;
+        const{firstName,lastName,email,password,confirmPassword} = req.body;
 
         // validdation 
-        if(!firstName || !lastname || !email || ! password || !confirmPassword){
-            res.status(403).json({
+        if(!firstName || !lastName || !email || ! password || !confirmPassword){
+           return res.status(403).json({
                 success:false,
-                message:"All fields are required"
+                message:"All fields are required -- you are missing somthing check this out "
             })
         };
 
         // check password 
         if(password !== confirmPassword){
-            res.status(400).json({
+            return res.status(400).json({
                 success:false,
                 message:"password and confirm Password field are not matched !"
             })
@@ -30,7 +30,7 @@ exports.signUp= async(req,res)=>{
         // check user is already present in DB or not 
         const existing_user = await User.findOne({email});
         if(existing_user){
-            res.status(400).json({
+           return res.status(400).json({
                 success:false,
                 message:"User is already exist, Please Logged in "
             })
@@ -43,20 +43,19 @@ exports.signUp= async(req,res)=>{
         // create entry in Db 
         const user = await User.create({
             firstName,
-            lastname,
+            lastName,
             email,
             password:hasshedPassword
         });
         console.log("user is created in Db", user)
 
         // send the success message 
-        res.status(200).json({
+        return res.status(200).json({
             success:true,
             message:"User is created Succesfully "
         })
     } catch (error) {
-
-        res.status(500).json({
+        return res.status(500).json({
             success:false,
             message:"Issue in Creating New user ",
             error:error 

@@ -3,6 +3,7 @@ import { toast } from "react-toastify"
 import {setLoading,setToken} from '../../Redux/Slices/authSlice'
 import { endpoints } from "../ApiEndPoints"  ; //  endPoints  la import kele ahe 
 import{apiConnector} from '../ApiConnector';
+import {setUser} from '../../Redux/Slices/profileSlice';
 
 
 // import Endpoints of auth controller 
@@ -38,7 +39,24 @@ export const login =(formData,navigate)=>{
 
           
             dispatch(setToken(response.data.token));
-            // isAuthenticated(true); // it is not a function 
+
+            
+            console.log("Priting login user name for Dicebear api ", response.data.user.firstName)
+            // dicebear api call here 
+            const userImage = response.data?.user?.image
+                    ? response.data.user.image
+                    : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName} ${response.data.user.lastName}`;
+
+
+            // Create updated user object--> yamadhe Image chi navin field add keli ahe 
+            const updatedUser = { ...response.data.user, image: userImage };
+
+            // Update Redux store--> redux store la update kele 
+            dispatch(setUser(updatedUser));
+
+            // Save to localStorage for persistence --> locaStoreage amdhe img store karun thevli 
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+
 
             // set token to localStorage 
             localStorage.setItem("token", JSON.stringify(response.data.token));
@@ -64,7 +82,17 @@ export const login =(formData,navigate)=>{
 export const signUp=(formData,navigate)=>{
 
     return async(dispatch)=>{
+
+        //  destruct the field from formData hook 
         const{firstName,lastName,email,password,confirmPassword} = formData;
+
+        // console.log("Signup request payload:", {
+        //             firstName,
+        //             lastName,
+        //             email,
+        //             password,
+        //             confirmPassword
+        // });
 
         const toastId = toast.loading("loading....")
         dispatch(setLoading(true));

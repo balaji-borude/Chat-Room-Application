@@ -2,7 +2,11 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    name:{
+    firstName:{
+        type:String,
+        required:true
+    },
+    lastName:{
         type:String,
         required:true
     },
@@ -14,6 +18,10 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    image:{  // this is for Profile Image 
+        type:String,
+    },
+    
     createdAt:{
         type:Date,
         default:Date.now()
