@@ -1,11 +1,17 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { login } from '../services/operations/authApi';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const[formData, setFormData] = useState({
-        email: "",
-        password: ""
+        email:"",
+        password:""
     });
 
     // change Handler
@@ -21,6 +27,10 @@ const Login = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         console.log("Printing Form Data " , formData);
+        // service/ operation madhe api call keleli ahe 
+        dispatch(login(formData,navigate));
+
+        navigate("/home")
     };
 
 

@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { signup } from '../Redux/Slices/authSlice';
+import { signUp } from '../services/operations/authApi'
+import {  useNavigate } from 'react-router-dom';
 //import { toast } from 'react-toastify';
 
 const SignUp = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const[formData,setFormData] = useState({
-        name:"",
+        firstName:"",
+        lastName:"",
         email:"",
         password:"",
         confirmPassword:""
@@ -23,7 +26,8 @@ const SignUp = () => {
     function submitHandler(e){
         e.preventDefault();
         console.log("Printing the Registration Form -->", formData)
-        dispatch(signup())
+        dispatch(signUp(formData,navigate))
+
 
     };
 
@@ -32,14 +36,25 @@ const SignUp = () => {
     <div>
         <form onSubmit={submitHandler}>
             <div>
-                <label htmlFor='name'> UserName</label>
+                <label htmlFor='firstName'> firstName</label>
                 <input 
                     type='text'
-                    name='name'
-                    id='name'
+                    name='firstName'
+                    id='firstName'
                     required
-                    placeholder='Enter userName'
-                    value={formData.name}
+                    placeholder='Enter FirstName'
+                    value={formData.firstName}
+                    onChange={changeHandler}
+
+                />
+                <label htmlFor='lastName'> lastName</label>
+                <input 
+                    type='text'
+                    name='lastName'
+                    id='lastName'
+                    required
+                    placeholder='Enter lastName'
+                    value={formData.lastName}
                     onChange={changeHandler}
 
                 />

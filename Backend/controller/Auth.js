@@ -10,10 +10,10 @@ require('dotenv').config();
 exports.signUp= async(req,res)=>{
     try {
         // get data from req.body 
-        const{name,email,password,confirmPassword} = req.body;
+        const{firstName, lastname,email,password,confirmPassword} = req.body;
 
         // validdation 
-        if(! name || !email || ! password || !confirmPassword){
+        if(!firstName || !lastname || !email || ! password || !confirmPassword){
             res.status(403).json({
                 success:false,
                 message:"All fields are required"
@@ -42,7 +42,8 @@ exports.signUp= async(req,res)=>{
 
         // create entry in Db 
         const user = await User.create({
-            name,
+            firstName,
+            lastname,
             email,
             password:hasshedPassword
         });
@@ -72,15 +73,16 @@ exports.login = async (req,res) => {
         
         // validation 
         if(!email || !password){
-            res.status(403).json({
+            return res.status(403).json({
                 success:false,
                 message:"All fields are required "
             })
         };
+        
         //check email is present In Db or not 
         const user = await User.findOne({email:email});
         if(!user){
-            res.status(401).json({
+            return res.status(401).json({
                 success:false,
                 message:"User is Not Registered ! Please Registered First"
             })
@@ -118,7 +120,7 @@ exports.login = async (req,res) => {
 
             // cookie optons
             const cookie_option = {
-                expires: new Date(Date.now() + 3 *24*60*60*1000), // cookie expires in 3 days 
+                expires: new Date(Date.now() + 3*24*60*60*1000), // cookie expires in 3 days 
                 httpOnly:true // by doing thsese javascript does not access cookie (enhace security )
             };
             // create cookie and send to response --> add token in cookie 
@@ -138,10 +140,10 @@ exports.login = async (req,res) => {
 
     } catch (error) {
       console.log(error)  
-      res.status(500).json({
-        success:false,
-        message:"Something went wrong , Login failure",
-        error:error
+       return res.status(500).json({
+            success:false,
+            message:"Something went wrong , Login failure",
+            error:error
       })
 
     }

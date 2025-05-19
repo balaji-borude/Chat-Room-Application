@@ -8,12 +8,16 @@
   const cors = require("cors"); // Import CORS middleware for handling cross-origin requests
  const { initializeSocket } = require("./config/Socket");  // Import Socket.IO setup
  
- const server = http.createServer(app);  // Create HTTP server for Express
+ const server = http.createServer(app);  // Create HTTP server for Express --> this is for websocket
 
- app.use(express.json()); 
  app.use(cookieParser()); 
-
-  app.use(cors());  
+ app.use(express.json())
+  // app.use(cors());
+  app.use(cors({
+  origin: "http://localhost:5173", // or 5173 if using Vite
+  credentials: true
+}));
+  
 
 
  // database conncetion la call karayche 
