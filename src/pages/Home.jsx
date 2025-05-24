@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import{setToken} from '../Redux/Slices/authSlice'
 import {setUser} from '../Redux/Slices/profileSlice'
+import NewChatModal from '../components/NewChatModal';
 
 const Home = () => {
 
@@ -72,11 +73,11 @@ const Home = () => {
 
           </div>
 
-          {/* for searching the UserName */}
+          {/* for searching the UserName and ChatRoom */}
           <div className="p-4">
             <input
               type="text"
-              placeholder="Search contacts..."
+              placeholder="Search ..."
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -87,7 +88,7 @@ const Home = () => {
 
             {/* this is for one contact change according to user Dynamically  */}
 
-            <ul>
+            {/* <ul>
               <li className="p-4 hover:bg-gray-200 cursor-pointer flex items-center space-x-3">
                 <img src="/contact1.jpg" alt="Contact" className="w-10 h-10 rounded-full" />
                 <div>
@@ -95,16 +96,28 @@ const Home = () => {
                   <p className="text-sm text-gray-500">Last message preview...</p>
                 </div>
 
-                {/* this is used for Unread messaage --> dynamically change this brooo  */}
-                {/* <span className="ml-auto bg-blue-500 text-white text-xs px-2 rounded-full">3</span> */}
+                <span className="ml-auto bg-blue-500 text-white text-xs px-2 rounded-full">3</span>
               </li>
 
-              {/* More contacts */}
 
-              {/* if any thing new want to add after this is going to be heae  */}
+            </ul> */}
 
+            {/* create a button for create new Chatroom  */}
+            {/* Create buttons for chatroom actions */}
+              <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4 p-4  rounded-2xl ">
 
-            </ul>
+                <button className="w-full sm:w-auto px-6 py-2 bg-white font-semibold rounded-xl hover:bg-indigo-100 transition-all duration-300 shadow-md hover:cursor-pointer"
+                onClick={<NewChatModal/>}
+                >
+                  New Chatroom
+                </button>
+
+                <button className="w-full sm:w-auto px-6 py-2 bg-white font-semibold rounded-xl hover:bg-indigo-100 transition-all duration-300 shadow-md hover:cursor-pointer">
+                  Join Chatroom
+                </button>
+
+            </div>
+
 
 
           </div>
