@@ -4,33 +4,38 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import{setToken} from '../Redux/Slices/authSlice'
 import {setUser} from '../Redux/Slices/profileSlice'
-import NewChatModal from '../components/NewChatModal';
+import NewModal from '../components/NewModal';
 
 const Home = () => {
 
   // if there is  message present in input box then only show arrow button otherwise show 'send' button
 
-  const [msgPresent,setMsgPresent] = useState(false)
+  // useState 
+  const [msgPresent,setMsgPresent ] = useState(false)
 
 
   const { user } = useSelector((state) => state.profile)
   const [showLogout, setShowLogout] = useState(false);
 
+  // create new chatroom states are hear 
+  const [showNewRoomModal , setshowNewRoomModal] = useState(false);
+  const [showJoinRoomModal,setShowJoinRoomModal] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch(); // This is how you get access to dispatch
 
-// logout handler 
+  // logout handler 
   const handleLogout = () => {
-    // Clear local storage or tokens
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+      // Clear local storage or tokens
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
 
-    // Clear Redux state
-    dispatch(setUser(null));
-    dispatch(setToken(null)); // if you're managing token separately
+      // Clear Redux state
+      dispatch(setUser(null));
+      dispatch(setToken(null)); // if you're managing token separately
 
-    // Redirect to login page
-    navigate("/login");
+      // Redirect to login page
+      navigate("/login");
   };
 
   return (
@@ -40,10 +45,10 @@ const Home = () => {
       <div className="flex h-screen bg-gray-100">
 
         {/* Sidebar  main section */}
-        <section className="w-72  bg-white border-r flex flex-col">
+        <section className="w-72  bg-white border-r border-gray-200 flex flex-col">
 
           {/* dp and username div */}
-          <div className="p-4 h-16 border-b flex items-center space-x-4">
+          <div className="p-4 h-16 border-b  border-gray-200  flex items-center space-x-4">
             {/* use dicebear APi to show user firstName and LastName Initials for  */}
             <img
             src={user.image}
@@ -78,7 +83,7 @@ const Home = () => {
             <input
               type="text"
               placeholder="Search ..."
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-200 shadow-xl rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -104,19 +109,47 @@ const Home = () => {
 
             {/* create a button for create new Chatroom  */}
             {/* Create buttons for chatroom actions */}
-              <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4 p-4  rounded-2xl ">
+            <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4 p-4  rounded-2xl ">
 
                 <button className="w-full sm:w-auto px-6 py-2 bg-white font-semibold rounded-xl hover:bg-indigo-100 transition-all duration-300 shadow-md hover:cursor-pointer"
-                onClick={<NewChatModal/>}
+                onClick={()=>setshowNewRoomModal(true)}
                 >
                   New Chatroom
                 </button>
 
-                <button className="w-full sm:w-auto px-6 py-2 bg-white font-semibold rounded-xl hover:bg-indigo-100 transition-all duration-300 shadow-md hover:cursor-pointer">
+                <button className="w-full sm:w-auto px-6 py-2 bg-white font-semibold rounded-xl hover:bg-indigo-100 transition-all duration-300 shadow-md hover:cursor-pointer"
+                onClick={()=>setShowJoinRoomModal(true)}
+                >
                   Join Chatroom
                 </button>
 
             </div>
+
+            {/* Modal  rendering  are here */}
+
+            {/* if chatmodel is true then show the create new chatroom model. */}
+            {/* create New chatroom */}
+            {
+              showNewRoomModal ? 
+              (<NewModal  
+                heading={"Create new Chatroom "}
+                placeholder={"Enter your chat Room name...."}
+                btntext={"Create Room"}
+                onClose={()=>setshowNewRoomModal(false)}/>) 
+              :"" 
+            }
+
+
+            {/* Join new Chatroom  */}
+            {
+              showJoinRoomModal ? 
+              (<NewModal  
+                heading={"Join Chatroom"}
+                placeholder={"Enter Room Id"}
+                btntext={"Join Room"}
+                onClose={()=>setShowJoinRoomModal(false)}/>)
+                :""
+            }
 
 
 
@@ -127,8 +160,9 @@ const Home = () => {
         {/* $$$$$$$$$$   Chat Window section  $$$$$$$$$$$$ */}
 
         <section className="flex flex-col flex-1">
+          
           {/* Header */}
-          <div className="h-16 p-4 border-b flex items-center justify-between bg-white">
+          <div className="h-16 p-4 border-b border-gray-200 flex items-center justify-between bg-white">
             <h2 className="text-xl font-semibold">Contact Name</h2>
             <div>
               {/* Action icons e.g. call, settings */}
@@ -160,11 +194,11 @@ const Home = () => {
 
 
           {/* Message Input */}
-          <form className="p-4 border-t bg-white flex space-x-3">
+          <form className="p-4 border-t border-gray-200 bg-white flex space-x-3">
             <input
               type="text"
               placeholder="Type a message..."
-              className="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
 

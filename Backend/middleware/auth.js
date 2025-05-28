@@ -1,53 +1,55 @@
 /* eslint-disable no-undef */
-const jwt = require('jsonwebtoken');
-
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-// auth middlleware
-exports.auth= async(req,res,next)=>{
-    try {
-        console.log("Entering in Auth the middleware ");
-        // get token from cookie or header
-        const token = req.cookies?.token; //req.header("Authorization").replace("Bearer ","");
-        // get token from cookie --> need cookie parser --> req.cookies?.token || 
-        console.log("Token in middleware ==>",token );
+// Auth middleware
+exports.auth = async (req, res, next) => {
+  try {
+    console.log("##### Entering Auth Middleware");
 
-        // adding validation to token 
-        if(!token){
-            res.status(401).json({
-                success:false,
-                message:"UnAuthorized: No token is Available  "
-            })                                                
-        };
+    // Safely extract Authorization header
+    const authHeader = req.header("Authorization");
 
-        try {
-            const JWT_SECRET = process.env.JWT_SECRET;
-            console.log("printing JWT_SECRET==> ",JWT_SECRET);
-            
-            // decode the token 
-            const decode =  jwt.verify(token, JWT_SECRET);
-            console.log("Printing Decoded token ---->" , decode);
-
-            console.log(decode);
-            req.user = decode;  
-           
-
-        } catch (error) {
-              return res.status(401).json({
-                success:false,
-                message:'Token is invalid',
-                error:error
-            });
-
-        };
-
-        next(); // going to next middleware or controller  
-        
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            success:false,
-            message:"Error in Authentication "
-        })
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: No or invalid token format",
+      });
     }
-}
+
+    // Extract and clean the token
+    let rawToken = authHeader.replace("Bearer ", "").trim();
+
+    // Remove wrapping quotes if any
+    const token = rawToken.replace(/^"|"$/g, "");
+    console.log("Token in middleware ==>", token);
+
+    // Sanity check for empty token
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: Token is empty after formatting",
+      });
+    }
+
+    const JWT_SECRET = process.env.JWT_SECRET;
+    console.log("Printing JWT_SECRET ==> ", JWT_SECRET);
+
+    // Token verification
+    const decoded = jwt.verify(token, JWT_SECRET);
+    console.log("Decoded token -->", decoded);
+
+    // Attach user to request
+    req.user = decoded;
+
+    // Proceed to next middleware or controller
+    next();
+  } catch (error) {
+    console.error("Error in auth middleware:", error);
+    return res.status(401).json({
+      success: false,
+      message: "Token verification failed",
+      error: error.message || error,
+    });
+  }
+};

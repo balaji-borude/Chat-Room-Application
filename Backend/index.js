@@ -40,11 +40,11 @@ initSocket(server);
   const PORT = process.env.PORT;
 
   app.get("/", (req,res)=>{
-    res.send(`<h1> This is Home Page --> Server and Socket is Running  </h1>`)
-      // return res.json({
-      //   success:true,
-      //   message:"Your server is Up and Running on  "
-      // })
+    // res.send(`<h1> This is Home Page --> Server and Socket is Running  </h1>`)
+      return res.json({
+        success:true,
+        message:"Your server is Up and Running on  "
+      })
   });
 
 
