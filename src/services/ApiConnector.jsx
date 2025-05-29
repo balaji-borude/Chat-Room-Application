@@ -4,6 +4,7 @@ export const axiosInstance = axios.create({});
 
 // axios cha instance ghetla 
 // ERROR ;-- > in this  file error got of typo which last for 3 days  which is of Data ---> to --> data  
+axios.defaults.withCredentials = true;
 
 export const apiConnector = (method,url,bodyData,headers,params)=>{
     return axiosInstance({

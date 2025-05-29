@@ -5,16 +5,21 @@ import { useNavigate } from 'react-router-dom';
 import{setToken} from '../Redux/Slices/authSlice'
 import {setUser} from '../Redux/Slices/profileSlice'
 import NewModal from '../components/NewModal';
+import { createChatRoom,joinChatRoom} from '../services/operations/chatRoomApi';
+
+
+
 
 const Home = () => {
 
   // if there is  message present in input box then only show arrow button otherwise show 'send' button
-
   // useState 
   const [msgPresent,setMsgPresent ] = useState(false)
 
 
-  const { user } = useSelector((state) => state.profile)
+  const { user } = useSelector((state) => state.profile);
+
+  // useState 
   const [showLogout, setShowLogout] = useState(false);
 
   // create new chatroom states are hear 
@@ -37,6 +42,22 @@ const Home = () => {
       // Redirect to login page
       navigate("/login");
   };
+
+
+  // passing the fucntion to new Modal components as an argument '
+  // these function is defined in paranet components and then pass them to  child means newModal components 
+  const createRoomHandler = (title) => {
+  console.log("Creating room with title:", title);
+  dispatch(createChatRoom(title));
+};
+
+const joinRoomHandler = (roomId) => {
+  console.log("Joining room with ID:", roomId);
+  dispatch(joinChatRoom(roomId));
+};
+
+
+
 
   return (
     // main div
@@ -107,7 +128,7 @@ const Home = () => {
 
             </ul> */}
 
-            {/* create a button for create new Chatroom  */}
+            {/*  BUTTONS  */}
             {/* Create buttons for chatroom actions */}
             <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4 p-4  rounded-2xl ">
 
@@ -131,11 +152,16 @@ const Home = () => {
             {/* create New chatroom */}
             {
               showNewRoomModal ? 
-              (<NewModal  
-                heading={"Create new Chatroom "}
-                placeholder={"Enter your chat Room name...."}
-                btntext={"Create Room"}
-                onClose={()=>setshowNewRoomModal(false)}/>) 
+              (
+                <NewModal  
+                  heading={"Create new Chatroom "}
+                  placeholder={"Enter your chat Room name...."}
+                  btntext={"Create Room"}
+                  onClose={()=>setshowNewRoomModal(false)}
+                  onSubmit={createRoomHandler}
+                />
+              ) 
+
               :"" 
             }
 
@@ -143,13 +169,20 @@ const Home = () => {
             {/* Join new Chatroom  */}
             {
               showJoinRoomModal ? 
-              (<NewModal  
+              (
+              <NewModal  
                 heading={"Join Chatroom"}
                 placeholder={"Enter Room Id"}
                 btntext={"Join Room"}
-                onClose={()=>setShowJoinRoomModal(false)}/>)
+                onClose={()=>setShowJoinRoomModal(false)}
+                onSubmit={joinRoomHandler}
+                />
+              )
                 :""
             }
+
+
+            {/* SHOWING ALL ROOM IN UI which having these user is  */}
 
 
 

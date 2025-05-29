@@ -9,6 +9,7 @@ const {
   JOINCHATROOM_API 
 } = endpoints;
 
+// create chat room 
 export const createChatRoom = (roomTitle) => {
   return async (dispatch) => {
     console.log("Inside createChatRoom action");
@@ -46,8 +47,12 @@ export const createChatRoom = (roomTitle) => {
   };
 };
 
-export const joinChatRoom = ()=>{
+
+// join existing chatroom 
+export const joinChatRoom = (roomId)=>{
+
   return async(dispatch)=>{
+
     console.log("entering in Join chat room  funcion ");
 
     dispatch(setLoading(true));
@@ -57,7 +62,8 @@ export const joinChatRoom = ()=>{
       const token = localStorage.getItem("token");
       console.log("printing token from JOIN chatroom api----> ", token);
 
-      const response = await apiConnector("POST",JOINCHATROOM_API,{}, {
+      // no body needed to join chatroom that why used null 
+      const response = await apiConnector("POST",  JOINCHATROOM_API(roomId),{}, {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
       });
@@ -74,3 +80,6 @@ export const joinChatRoom = ()=>{
 
   }
 }
+
+// show all the chatroom user has  Joined  --> In UI these all chatroom name is shown in left side of UI --> those chatroom user is joined 
+
