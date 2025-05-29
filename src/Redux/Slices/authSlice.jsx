@@ -8,7 +8,9 @@ const initialState = {
 
     // // jr token localstorage madhe bhetle tr te use kr nahi 
     //token: localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : null
-    token: localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : null,
+    // token: localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : null,
+    token: localStorage.getItem("token") || null,
+
 };
 
 const authSlice = createSlice({

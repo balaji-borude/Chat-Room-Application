@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
 import { useDispatch } from 'react-redux';
-import {createChatRoom} from '../services/operations/chatRoomApi';
+import {createChatRoom, joinChatRoom} from '../services/operations/chatRoomApi';
 
 const NewChatModal = ({ placeholder,btntext,heading,onClose }) => {
   
@@ -10,14 +10,19 @@ const NewChatModal = ({ placeholder,btntext,heading,onClose }) => {
   // dispatch hook instance 
   const dispatch = useDispatch();
 
-  // function handling 
-  const createRoomHandler=()=>{
-    // console.log("function of create room is called ");
-    // yethe title  he ===> useStae ahe tyala aplyala extract karave lagel jevha frontend la call katrave lagel tevha \
+  // function for handling  create chatroom
+  // const createRoomHandler=()=>{
+  //   // console.log("function of create room is called ");
+  //   // yethe title  he ===> useStae ahe tyala aplyala extract karave lagel jevha frontend la call katrave lagel tevha \
 
-    console.log("Printing title ,", inputValue);
-    dispatch(createChatRoom(inputValue))
-  };
+  //   console.log("Printing title ,", inputValue);
+  //   dispatch(createChatRoom(inputValue))
+  // };
+
+  // function for handling join chat room 
+  const joinRoomHandler = ()=>{
+    dispatch(joinChatRoom(inputValue))
+  }
 
   return (
     <div>
@@ -54,7 +59,7 @@ const NewChatModal = ({ placeholder,btntext,heading,onClose }) => {
           {/* Create Button */}
           <button
             className="w-full bg-indigo-600 text-white py-2 rounded-lg font-medium hover:bg-indigo-700 transition-all"
-            onClick={()=>createRoomHandler()}
+            onClick={()=>joinRoomHandler()}
           >
             {btntext}
           </button>

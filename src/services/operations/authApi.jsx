@@ -59,7 +59,7 @@ export const login =(formData,navigate)=>{
 
 
             // set token to localStorage 
-            localStorage.setItem("token", JSON.stringify(response.data.token));
+            localStorage.setItem("token", response.data.token);
 
             toast.dismiss(toastId)
             dispatch(setLoading(false)); 
