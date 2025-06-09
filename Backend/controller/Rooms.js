@@ -6,6 +6,35 @@ const Message = require("../model/Message");
 
 
 //Fetch available chatrooms.
+
+// fetch all chatroom created by user and User Joined those chatroom 
+exports.usersRoom = async(req,res)=>{
+    try {
+        // go to room document and aceesed  createdBy and participants array which having users id
+        // get userd id 
+        console.log("Entering in userRoom controlller ")
+        const userId = req.user.id ; // logged in users userId is this 
+        console.log("printing UserId",userId);
+
+        const response = await Room.find({participants:userId});
+        console.log("Printing response", response);
+
+
+        return res.status(200).json({
+            success:true,
+            message:" fetched all exisitng users chatroom "
+            
+        })
+        
+    } catch (error) {
+        console.log("Error occure while getting user chatroom", error);
+        return res.status(500).json({
+            success:false,
+            message:"Error occured while fetching all chatroom where User is present    "
+        })
+    }
+};
+
 exports.allChatRoom = async(req,res)=>{
     try {
         // fetch all room present in DB 

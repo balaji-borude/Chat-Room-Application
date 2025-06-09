@@ -102,7 +102,7 @@ exports.login = async (req,res) => {
 
             // jwt options / expiry
             const jwtOptions = {
-                expiresIn:'24h'
+                expiresIn:'7d'
             };
 
             // create Token 

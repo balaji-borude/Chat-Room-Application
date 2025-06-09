@@ -19,7 +19,7 @@ export const createChatRoom = (roomTitle) => {
 
     try {
       const token = localStorage.getItem("token");
-      console.log("printing token from createchat Room api----> ", token);
+      //console.log("printing token from createchat Room api----> ", token);
 
       // Check if token exists
       if (!token) {
@@ -53,14 +53,14 @@ export const joinChatRoom = (roomId)=>{
 
   return async(dispatch)=>{
 
-    console.log("entering in Join chat room  funcion ");
+    ///console.log("entering in Join chat room  funcion ");
 
     dispatch(setLoading(true));
 
     // actual api call \
     try {
       const token = localStorage.getItem("token");
-      console.log("printing token from JOIN chatroom api----> ", token);
+      //console.log("printing token from JOIN chatroom api----> ", token);
 
       // no body needed to join chatroom that why used null 
       const response = await apiConnector("POST",  JOINCHATROOM_API(roomId),{}, {
@@ -75,7 +75,7 @@ export const joinChatRoom = (roomId)=>{
     } catch (error) {
       console.log("JOIN CHAT ROOM API ERROR............", error);
       dispatch(setLoading(false));
-      toast.error("Failed to Create Chat Room");
+      toast.error("Failed to Joined Chat Room");
     }
 
   }
