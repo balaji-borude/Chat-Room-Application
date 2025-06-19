@@ -14,7 +14,7 @@ const Home = () => {
 
   // if there is  message present in input box then only show arrow button otherwise show 'send' button
   // useState 
-  const [msgPresent,setMsgPresent ] = useState(false)
+  //const [msgPresent,setMsgPresent ] = useState(false)
 
 
   const { user } = useSelector((state) => state.profile);
@@ -65,6 +65,10 @@ const Home = () => {
     dispatch(fetchAllChatRoom())
   },[])
   
+
+  // chatroom window code from here =-->
+  const [selectedChatRoom, setSelectedChatRoom] = useState(null);
+
 
 
 
@@ -202,7 +206,11 @@ const Home = () => {
                 {
                   chatrooms.length > 0 ? (
                     chatrooms.map((room) => (
-                      <div key={room._id} className='text-white bg-gray-800 rounded p-2 mb-2'>
+                      <div 
+                        key={room._id} 
+                        onClick={() => setSelectedChatRoom(room)}
+                        className='text-white bg-gray-800 rounded p-2 mb-2'
+                      >
                         {room.name}
                       </div>
                     ))
@@ -225,16 +233,17 @@ const Home = () => {
           
           {/* Header */}
           <div className="h-16 p-4 border-b border-gray-200 flex items-center justify-between bg-white">
-            <h2 className="text-xl font-semibold">Contact Name</h2>
+            <h2 className="text-xl font-semibold">
+              {selectedChatRoom ? selectedChatRoom.name : "Select a Chat Room"}
+            </h2>
             <div>
               {/* Action icons e.g. call, settings */}
             </div>
           </div>
 
+
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-
-
             {/* Messages are look like this -----> how should i do this ?????????? */}
 
             {/* Sender Message div ahe here   */}
@@ -269,8 +278,8 @@ const Home = () => {
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
             >
-              <span> {msgPresent? 'Send' : <IoSend />}</span>
-
+              {/* <span> {msgPresent? 'Send' : <IoSend />}</span> */}
+                <span> <IoSend /></span>
             </button>
 
           </form>
