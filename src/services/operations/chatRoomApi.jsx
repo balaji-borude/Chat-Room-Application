@@ -3,10 +3,13 @@ import { toast } from "react-toastify";
 import { apiConnector } from "../ApiConnector";
 import { endpoints } from "../ApiEndPoints";
 
+import { setChatRooms } from "../../Redux/Slices/chatRoomSlice";
+
 // importing the endpoints here 
 const { 
   CREATEROOM_API,
-  JOINCHATROOM_API 
+  JOINCHATROOM_API ,
+  FETCHROOM_API
 } = endpoints;
 
 // create chat room 
@@ -83,3 +86,27 @@ export const joinChatRoom = (roomId)=>{
 
 // show all the chatroom user has  Joined  --> In UI these all chatroom name is shown in left side of UI --> those chatroom user is joined 
 
+export const fetchAllChatRoom = ()=>{
+  return async(dispatch)=>{
+
+      dispatch(setLoading(true));
+
+      try {
+        //make the api request to fetach all chatroom 
+        const response = await apiConnector("GET",FETCHROOM_API);
+        console.log("Printing response of Fetching all chatroom", response);
+
+        // setChatroom reducer madhe all chatroom cha Array store kela ahe 
+        dispatch(setChatRooms(response?.data?.response || []));
+
+        dispatch(setLoading(false));
+        toast.success("All Chat Room Fetched Successfully");
+
+      } catch (error) {
+        console.log("FETCH CHAT ROOM API ERROR............", error);
+        dispatch(setLoading(false));
+        toast.error("Failed to fetch all chatroom ");
+      }
+
+  }
+}

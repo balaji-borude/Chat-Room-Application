@@ -12,7 +12,7 @@ exports.usersRoom = async(req,res)=>{
     try {
         // go to room document and aceesed  createdBy and participants array which having users id
         // get userd id 
-        console.log("Entering in userRoom controlller ")
+        console.log("Entering in userRoom controlller")
         const userId = req.user.id ; // logged in users userId is this 
         console.log("printing UserId",userId);
 

@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoSend } from "react-icons/io5";
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import{setToken} from '../Redux/Slices/authSlice'
 import {setUser} from '../Redux/Slices/profileSlice'
 import NewModal from '../components/NewModal';
-import { createChatRoom,joinChatRoom} from '../services/operations/chatRoomApi';
+import { createChatRoom,joinChatRoom,fetchAllChatRoom} from '../services/operations/chatRoomApi';
 
 
 
@@ -18,6 +18,9 @@ const Home = () => {
 
 
   const { user } = useSelector((state) => state.profile);
+
+  // for chatrroom fetching from state(redux - chatRoom)
+  const { chatrooms } = useSelector((state) => state.chatRoom);
 
   // useState 
   const [showLogout, setShowLogout] = useState(false);
@@ -47,14 +50,21 @@ const Home = () => {
   // passing the fucntion to new Modal components as an argument '
   // these function is defined in paranet components and then pass them to  child means newModal components 
   const createRoomHandler = (title) => {
-  console.log("Creating room with title:", title);
-  dispatch(createChatRoom(title));
+    //console.log("Creating room with title:", title);
+    dispatch(createChatRoom(title));
 };
 
-const joinRoomHandler = (roomId) => {
-  console.log("Joining room with ID:", roomId);
-  dispatch(joinChatRoom(roomId));
-};
+  const joinRoomHandler = (roomId) => {
+    //console.log("Joining room with ID:", roomId);
+    dispatch(joinChatRoom(roomId));
+  };
+
+  // fetch all chatroom on every render 
+  useEffect(()=>{
+    // every render i have to fetch all chatroom 
+    dispatch(fetchAllChatRoom())
+  },[])
+  
 
 
 
@@ -182,7 +192,26 @@ const joinRoomHandler = (roomId) => {
             }
 
 
-            {/* SHOWING ALL ROOM IN UI which having these user is  */}
+            {/* SHOWING ALL ROOM which is created by user and user joined  */}
+
+            <div className='w-full h-full'> 
+              {/* what we have to show in this section --> is the only the name of chatroom 
+              name is present in  ==> data.response[] */}
+
+                <h2 className=' text-xl font-semibold m-5'>Available Chat Rooms:</h2>
+                {
+                  chatrooms.length > 0 ? (
+                    chatrooms.map((room) => (
+                      <div key={room._id} className='text-white bg-gray-800 rounded p-2 mb-2'>
+                        {room.name}
+                      </div>
+                    ))
+                  ) : (
+                    <p className='text-white'>No chat rooms available</p>
+                  )
+                }
+
+            </div>
 
 
 
