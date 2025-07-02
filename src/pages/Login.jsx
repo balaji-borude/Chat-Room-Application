@@ -16,13 +16,15 @@ const Login = () => {
 
     // change Handler
     const changeHandler=(event)=>{
+
+        // updating the useState Hook 
         setFormData(prevData =>({
             ...prevData,
             [event.target.name]: event.target.value
         }))
         
-    }
-
+    };
+    
     // form submit handler 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -30,7 +32,7 @@ const Login = () => {
         // service/ operation madhe api call keleli ahe 
         dispatch(login(formData,navigate));
 
-        navigate("/home")
+        
     };
 
 

@@ -2,6 +2,9 @@
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
+
+    // Confusion ==> senderId and Recivers ID can i make this or not ???????
+    
     userID: {
         type: String,
         required: true

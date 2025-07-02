@@ -5,13 +5,30 @@ import SignUp from './pages/SignUp'
 import Home from './pages/Home'
 
 import PrivateRoute from './components/PrivateRoute'
+import PublicRoute from './components/PublicRoute'
+
 const App = () => {
   return (
     <div className=''>
     
       <Routes>
-        <Route path='/' element={<Login/>} />
-        <Route path='/signup' element={<SignUp/>}/>
+
+        <Route path='/' 
+          element={
+            <PublicRoute>
+              <Login/>
+
+            </PublicRoute>
+          } 
+        />
+        <Route path='/signup'
+         element={
+          <PublicRoute>
+
+            <SignUp/>
+          </PublicRoute>
+        }
+        />
 
 
       {/* when user is logged in then only give */}
